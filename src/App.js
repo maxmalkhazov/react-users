@@ -1,28 +1,33 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
+
+import UserList from "./UserList";
+
+
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+    constructor() {
+        super()
+        this.state = {
+            users: ["GrahamCampbell","fabpot","weierophinney","rkh","josh"]
+        }
+    }
+    
+    componentWillUpdate() {
+        fetch(`https://api.github.com/users/${this.state.users[0]}`)
+        .then(response => response.json())
+        .then(results => this.setState({users: results.results}));
+    }
+    
+    render() {
+        const { users } = this.state;
+        return (
+            <div>
+                <h1>Top 5 Github Users</h1>
+                <UserList users={users} />
+            </div>
+        );
+    }
 }
 
 export default App;
